@@ -387,42 +387,13 @@ function Starfield() {
   return <canvas ref={ref} aria-hidden="true" className="absolute inset-0 h-full w-full" />;
 }
 
-/* Black hole: pure CSS + SVG, lensing via an SVG displacement filter. */
+/* A locally authored cinematic image carries the lensing detail; restrained layers add depth without WebGL cost. */
 function BlackHole() {
   return (
-    <div aria-hidden="true" className="relative aspect-square w-full">
-      <svg className="absolute h-0 w-0">
-        <filter id="lensing" x="-50%" y="-150%" width="200%" height="400%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4">
-            <animate attributeName="baseFrequency" dur="24s" values="0.012;0.016;0.012" repeatCount="indefinite" />
-          </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" scale="14" />
-        </filter>
-      </svg>
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 10 }}>
-        <div className="bh-halo absolute inset-[4%] rounded-full" />
-      </div>
-      {/* back half of the tilted disk */}
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 18 }}>
-        <div className="absolute inset-[-12%] [transform:rotateX(74deg)]" style={{ filter: "url(#lensing)" }}>
-          <div className="bh-disk absolute inset-0 rounded-full" />
-        </div>
-      </div>
-      {/* lensed ring arching over the shadow */}
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 26 }}>
-        <div className="bh-disk absolute inset-[18%] rounded-full opacity-80" style={{ animationDuration: "60s", animationDirection: "reverse" }} />
-        <div className="bh-core absolute inset-[30%] rounded-full" />
-        <div className="bh-photon absolute inset-[30.5%] rounded-full" />
-      </div>
-      {/* front half of the disk crossing the shadow */}
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 34 }}>
-        <div
-          className="absolute inset-[-12%] [transform:rotateX(74deg)]"
-          style={{ maskImage: "linear-gradient(to bottom, transparent 42%, #000 58%)", filter: "url(#lensing)" }}
-        >
-          <div className="bh-disk absolute inset-0 rounded-full" />
-        </div>
-      </div>
+    <div aria-hidden="true" className="cosmic-object parallax-layer relative w-full aspect-[3/2]" style={{ ["--depth" as string]: 14 }}>
+      <div className="cosmic-aura absolute inset-[12%] rounded-full" />
+      <img src={blackHoleImage} width={1536} height={1024} alt="" fetchPriority="high" className="cosmic-image relative h-full w-full object-contain" />
+      <div className="cosmic-orbit absolute inset-[21%_9%] rounded-full" />
     </div>
   );
 }
@@ -450,7 +421,7 @@ function Hero() {
   }, []);
 
   return (
-    <section id="top" ref={ref} className="relative isolate overflow-hidden pt-28 pb-20 sm:pt-36 lg:min-h-[100svh] lg:pb-28">
+    <section id="top" ref={ref} className="relative isolate overflow-hidden pt-24 pb-16 sm:pt-28 sm:pb-20">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         <Starfield />
         <div
@@ -462,35 +433,39 @@ function Hero() {
         />
       </div>
 
-      <div className="mx-auto grid max-w-6xl items-center gap-6 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-4">
-        <div className="pointer-events-none order-1 mx-auto w-[78%] max-w-[300px] sm:max-w-[380px] lg:order-2 lg:w-full lg:max-w-[560px]">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="pointer-events-none relative mx-auto -mb-3 w-full max-w-[920px] sm:-mb-12 lg:-mb-20">
           <BlackHole />
         </div>
 
-        <div className="relative order-2 lg:order-1">
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
           <Reveal>
-            <p className="eyebrow inline-flex items-center gap-2">
+            <p className="eyebrow inline-flex items-center justify-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[var(--shadow-glow)]" />
-              Portfolio — Roshan Ingershal VR
+              Portfolio / AI · Data · Systems
             </p>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-6 font-display text-5xl leading-[1.03] font-medium tracking-tight text-foreground sm:text-7xl">
-              Aspiring software engineer, building with{" "}
-              <span className="text-gradient-signal italic">intent</span>.
+            <h1 className="mt-5 font-display text-[clamp(2.7rem,6vw,5.5rem)] leading-[1.08] font-medium text-foreground">
+              Roshan Ingershal VR<span className="text-primary">.</span>
             </h1>
           </Reveal>
           <Reveal delay={160}>
-            <div className="glass glass-edge-glow mt-8 max-w-xl rounded-2xl p-5 sm:p-6">
-              <p className="text-base leading-relaxed text-foreground-muted sm:text-lg">
-                I'm interested in artificial intelligence, full-stack development and data
-                science — and I'm putting in the reps: studying, building, and learning in
-                public.
-              </p>
-            </div>
+            <p className="mt-3 text-sm font-semibold uppercase text-accent sm:text-base">AI/ML Engineer &amp; Data Scientist</p>
           </Reveal>
           <Reveal delay={240}>
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-foreground-muted sm:text-xl">
+              Building intelligent systems, data-driven products, and practical AI solutions.
+            </p>
+          </Reveal>
+          <Reveal delay={280}>
+            <div className="mt-7 flex flex-wrap justify-center gap-2 text-left">
+              <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">IIT Madras · BS Data Science (Foundation)</span>
+              <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">B.E. Computer Science Engineering · J.N.N. Institute of Engineering</span>
+            </div>
+          </Reveal>
+          <Reveal delay={320}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <span className="relative inline-flex rounded-full p-px">
                 <span aria-hidden="true" className="ring-glow absolute inset-0 rounded-full opacity-80 blur-[1px]" />
                 <Magnetic
