@@ -1,23 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent as RPointerEvent } from "react";
+import { Button } from "@/components/ui/button";
+import blackHoleImage from "@/assets/black-hole-cinematic.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Roshan Ingershal VR — Software Engineer in the Making" },
+      { title: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist" },
       {
         name: "description",
         content:
-          "Portfolio of Roshan Ingershal VR — aspiring software engineer interested in AI, full-stack development and data science. B.E. CSE at J.N.N Institute of Engineering; B.S. Data Science at IIT Madras.",
+          "Roshan Ingershal VR — AI/ML Engineer & Data Scientist building intelligent systems, data-driven products and practical AI solutions.",
       },
       {
         property: "og:title",
-        content: "Roshan Ingershal VR — Software Engineer in the Making",
+        content: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist",
       },
       {
         property: "og:description",
         content:
-          "Aspiring software engineer exploring AI, full-stack development and data science.",
+          "Building intelligent systems, data-driven products and practical AI solutions.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -33,59 +35,56 @@ const NAV_SECTIONS = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
+  { id: "lab", label: "Innovation Lab" },
   { id: "education", label: "Education" },
   { id: "exploring", label: "Exploring" },
   { id: "contact", label: "Contact" },
 ] as const;
 
-const SKILL_GROUPS = [
+const CURRENT_SKILL_GROUPS = [
   {
     title: "Languages",
-    note: "The foundations I write most of my code in.",
     skills: ["Python", "SQL", "JavaScript", "HTML", "CSS"],
   },
   {
     title: "Frameworks & Tools",
-    note: "What I reach for to build and ship.",
     skills: ["FastAPI", "Streamlit", "Git", "GitHub"],
   },
   {
     title: "Data & Interfaces",
-    note: "Where data meets the outside world.",
     skills: ["SQLite", "REST APIs"],
   },
 ] as const;
+
+const EXPANDING_LANGUAGES = ["Java", "C", "C++", "TypeScript", "Rust", "Go", "Kotlin", "PHP", "C#", "Swift", "R"];
 
 const PROJECTS = [
   {
     index: "01",
     title: "AI-Powered Anomaly Detection Dashboard",
-    tags: ["Python", "Streamlit", "AI"],
     overview: "Project overview coming soon",
   },
   {
     index: "02",
     title: "15-Puzzle Solver using IDA*",
-    tags: ["Python", "Algorithms"],
     overview: "Project overview coming soon",
   },
   {
     index: "03",
     title: "Route Optimization System",
-    tags: ["Python", "Algorithms"],
     overview: "Project overview coming soon",
   },
 ] as const;
 
 const EDUCATION = [
   {
-    period: "2024 — Present",
+    period: "Currently studying",
     degree: "B.E. Computer Science and Engineering",
     institution: "J.N.N Institute of Engineering",
     detail: "Second year",
   },
   {
-    period: "Ongoing",
+    period: "Currently studying",
     degree: "B.S. in Data Science (Foundation)",
     institution: "IIT Madras",
     detail: "Foundation level",
@@ -208,7 +207,7 @@ function Nav() {
             Get in touch
           </a>
 
-          <button
+          <Button
             type="button"
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -228,7 +227,7 @@ function Nav() {
                 }`}
               />
             </span>
-          </button>
+          </Button>
         </nav>
 
         {open && (
