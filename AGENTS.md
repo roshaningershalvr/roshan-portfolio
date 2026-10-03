@@ -10,4 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep this portfolio as one section-anchored TanStack page, because its navigation is a continuous editorial journey.
-- Store the cinematic black-hole visual as a bundled local image and layer lightweight CSS motion over it, because this preserves image fidelity and mobile performance without a WebGL dependency.
+- Render the hero black hole in Canvas 2D with a CSS-only fallback, because the accretion flow must animate genuinely while remaining mobile-friendly and accessible.

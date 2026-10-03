@@ -173,21 +173,14 @@
   }
 }
 
-/* Locally generated lensed accretion disk with a very slow breathing glow. */
-.cosmic-image { mask-image: radial-gradient(ellipse 68% 70% at center, #000 65%, transparent 100%); }
-.cosmic-aura {
-  background: radial-gradient(ellipse, var(--accent-soft), var(--primary-soft) 48%, transparent 72%);
-  filter: blur(42px);
-  animation: cosmic-breathe 12s ease-in-out infinite alternate;
+/* Static painting only while canvas is unavailable or before it initializes. */
+.cosmic-fallback {
+  background:
+    radial-gradient(ellipse 11% 16% at 50% 49%, var(--horizon) 85%, transparent 100%),
+    radial-gradient(ellipse 18% 23% at 50% 49%, transparent 61%, var(--accent-soft) 70%, transparent 88%),
+    radial-gradient(ellipse 43% 9% at 50% 50%, transparent 21%, var(--primary-soft) 53%, transparent 90%);
 }
-.cosmic-orbit {
-  border: 1px solid var(--glass-edge);
-  transform: rotate(-14deg) scaleY(0.4);
-  opacity: .4;
-  animation: cosmic-orbit 28s ease-in-out infinite alternate;
-}
-@keyframes cosmic-breathe { to { opacity: .5; transform: scale(1.08); } }
-@keyframes cosmic-orbit { to { transform: rotate(14deg) scaleY(.42); opacity: .18; } }
+[data-ready="true"] .cosmic-fallback { display: none; }
 
 .parallax-layer {
   transform: translate3d(calc(var(--px, 0) * var(--depth, 0) * 1px), calc(var(--py, 0) * var(--depth, 0) * 1px), 0);

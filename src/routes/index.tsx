@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent as RPointerEvent } from "react";
 import { Button } from "@/components/ui/button";
-import blackHoleImage from "@/assets/black-hole-cinematic.jpg";
+import { CosmicBlackHole } from "@/components/CosmicBlackHole";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -85,9 +85,9 @@ const EDUCATION = [
   },
   {
     period: "Currently studying",
-    degree: "B.S. in Data Science (Foundation)",
+    degree: "B.S. in Data Science",
     institution: "IIT Madras",
-    detail: "Foundation level",
+    detail: "Currently pursuing",
   },
 ] as const;
 
@@ -388,17 +388,6 @@ function Starfield() {
   return <canvas ref={ref} aria-hidden="true" className="absolute inset-0 h-full w-full" />;
 }
 
-/* A locally authored cinematic image carries the lensing detail; restrained layers add depth without WebGL cost. */
-function BlackHole() {
-  return (
-    <div aria-hidden="true" className="cosmic-object parallax-layer relative w-full aspect-[3/2]" style={{ ["--depth" as string]: 14 }}>
-      <div className="cosmic-aura absolute inset-[12%] rounded-full" />
-      <img src={blackHoleImage} width={1536} height={1024} alt="" fetchPriority="high" className="cosmic-image relative h-full w-full object-contain" />
-      <div className="cosmic-orbit absolute inset-[21%_9%] rounded-full" />
-    </div>
-  );
-}
-
 function Hero() {
   const ref = useRef<HTMLElement | null>(null);
   useEffect(() => {
@@ -436,7 +425,7 @@ function Hero() {
 
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="pointer-events-none relative mx-auto -mb-3 w-full max-w-[920px] sm:-mb-12 lg:-mb-20">
-          <BlackHole />
+          <CosmicBlackHole />
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -461,7 +450,7 @@ function Hero() {
           </Reveal>
           <Reveal delay={280}>
             <div className="mt-7 flex flex-wrap justify-center gap-2 text-left">
-              <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">IIT Madras · BS Data Science (Foundation)</span>
+              <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">IIT Madras · BS Data Science</span>
               <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">B.E. Computer Science Engineering · J.N.N. Institute of Engineering</span>
             </div>
           </Reveal>
@@ -514,7 +503,7 @@ function About() {
           <Reveal>
             <p>
               I'm Roshan, a second-year Computer Science student at J.N.N Institute of
-              Engineering, currently also pursuing the Foundation level of the B.S. in
+              Engineering, currently also pursuing the B.S. in
               Data Science from IIT Madras.
             </p>
           </Reveal>
@@ -612,7 +601,6 @@ function InnovationLab() {
           <Reveal><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Concept / workforce intelligence</p><h3 className="mt-5 font-display text-2xl text-foreground">AI Workforce Operating System (WOS)</h3><p className="mt-4 leading-relaxed text-foreground-muted">A concept for mapping skills, identifying skill gaps, learning pathways, workforce demand, and reskilling insights for individuals, enterprises, and public-sector planning.</p></article></Reveal>
           <Reveal delay={90}><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Selected idea / early-stage concept</p><h3 className="mt-5 font-display text-2xl text-foreground">MSME-Selected Innovation</h3><p className="mt-4 leading-relaxed text-foreground-muted">An idea selected in an MSME initiative: an early-stage industrial machine monitoring and sensing concept for capturing machine parameters.</p></article></Reveal>
         </div>
-        <Reveal><article className="glass mt-5 flex flex-col gap-5 rounded-lg p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"><div><p className="eyebrow">Hackathon achievement</p><h3 className="mt-2 font-display text-2xl text-foreground">Hackathon Winner</h3></div><p className="text-sm text-foreground-muted">Add event name · Add year · Add award/track</p></article></Reveal>
       </div>
     </section>
   );

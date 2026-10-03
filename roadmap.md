@@ -1,0 +1,4 @@
+- [x] Remove the hackathon achievement and placeholders without leaving a gap.
+- [x] Remove Foundation wording while retaining ongoing education status.
+- [ ] Replace the bundled hero image with animated Canvas black-hole art and remove the unused image.
+- [ ] Verify desktop/mobile rendering, reduced motion, navigation, and errors.
