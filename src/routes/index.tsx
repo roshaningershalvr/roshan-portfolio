@@ -489,12 +489,12 @@ function Hero() {
   );
 }
 
-function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
+function SectionHeading({ eyebrow, title, id }: { eyebrow: string; title: string; id: string }) {
   return (
     <Reveal>
       <div>
         <p className="eyebrow">{eyebrow}</p>
-        <h2 className="mt-3 font-display text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+        <h2 id={id} className="mt-3 font-display text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
           {title}
         </h2>
       </div>
@@ -507,7 +507,7 @@ function About() {
     <section id="about" aria-labelledby="about-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto grid max-w-5xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
-          <SectionHeading eyebrow="About" title="A quick intro" />
+          <SectionHeading id="about-title" eyebrow="About" title="A quick intro" />
         </div>
         <div className="space-y-6 text-lg leading-relaxed text-foreground-muted">
           <Reveal>
@@ -541,7 +541,7 @@ function Skills() {
   return (
     <section id="skills" aria-labelledby="skills-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Capabilities / 01" title="Languages & Technologies" />
+        <SectionHeading id="skills-title" eyebrow="Capabilities / 01" title="Languages & Technologies" />
         <div className="mt-10 border-t border-line-strong pt-6">
           <h3 className="mb-6 flex items-center gap-3 text-sm font-semibold uppercase text-accent"><span className="h-1.5 w-1.5 rounded-full bg-accent" />Current skills</h3>
           <div className="grid gap-8 md:grid-cols-3">
@@ -576,7 +576,7 @@ function Projects() {
   return (
     <section id="projects" aria-labelledby="projects-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Projects" title="Featured work" />
+        <SectionHeading id="projects-title" eyebrow="Projects" title="Featured work" />
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {PROJECTS.map((project, i) => (
@@ -605,7 +605,7 @@ function InnovationLab() {
   return (
     <section id="lab" aria-labelledby="lab-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Concepts / 02" title="Innovation Lab / Ideas" />
+        <SectionHeading id="lab-title" eyebrow="Concepts / 02" title="Innovation Lab / Ideas" />
         <p className="mt-5 max-w-2xl text-foreground-muted">Early-stage thinking and proposals, distinct from completed projects.</p>
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <Reveal><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Concept / workforce intelligence</p><h3 className="mt-5 font-display text-2xl text-foreground">AI Workforce Operating System (WOS)</h3><p className="mt-4 leading-relaxed text-foreground-muted">A concept for mapping skills, identifying skill gaps, learning pathways, workforce demand, and reskilling insights for individuals, enterprises, and public-sector planning.</p></article></Reveal>
@@ -622,7 +622,7 @@ function Education() {
     <section id="education" aria-labelledby="education-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto grid max-w-5xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
-          <SectionHeading eyebrow="Education" title="Where I study" />
+          <SectionHeading id="education-title" eyebrow="Education" title="Where I study" />
         </div>
         <ol className="relative space-y-12 border-l border-line pl-8">
           {EDUCATION.map((item, i) => (
@@ -653,7 +653,7 @@ function Exploring() {
   return (
     <section id="exploring" aria-labelledby="exploring-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Right now" title="Currently exploring" />
+        <SectionHeading id="exploring-title" eyebrow="Right now" title="Currently exploring" />
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {EXPLORING.map((item, i) => (
@@ -686,7 +686,7 @@ function Contact() {
           }}
         >
           <Reveal>
-            <h2 className="mx-auto max-w-2xl font-display text-3xl font-medium tracking-tight text-foreground sm:text-5xl">
+            <h2 id="contact-title" className="mx-auto max-w-2xl font-display text-3xl font-medium tracking-tight text-foreground sm:text-5xl">
               Let's build something worth talking about.
             </h2>
           </Reveal>

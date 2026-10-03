@@ -40,7 +40,7 @@
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 0.5rem;
 
   /* Base — deep near-black space */
   --background: oklch(0.11 0.012 280);
@@ -173,43 +173,21 @@
   }
 }
 
-/* ---------- Black hole ---------- */
-
-.bh-disk {
-  background: conic-gradient(
-    from 0deg,
-    oklch(0.86 0.08 220 / 0%),
-    oklch(0.86 0.08 220 / 85%) 12%,
-    oklch(0.97 0.02 260 / 95%) 18%,
-    oklch(0.72 0.15 295 / 80%) 30%,
-    oklch(0.72 0.15 295 / 10%) 48%,
-    oklch(0.86 0.08 220 / 0%) 55%,
-    oklch(0.72 0.15 295 / 40%) 72%,
-    oklch(0.86 0.08 220 / 70%) 88%,
-    oklch(0.86 0.08 220 / 0%)
-  );
-  mask: radial-gradient(closest-side, transparent 52%, #000 60%, #000 74%, transparent 100%);
-  filter: blur(6px);
-  animation: bh-spin 40s linear infinite;
+/* Locally generated lensed accretion disk with a very slow breathing glow. */
+.cosmic-image { mask-image: radial-gradient(ellipse 68% 70% at center, #000 65%, transparent 100%); }
+.cosmic-aura {
+  background: radial-gradient(ellipse, var(--accent-soft), var(--primary-soft) 48%, transparent 72%);
+  filter: blur(42px);
+  animation: cosmic-breathe 12s ease-in-out infinite alternate;
 }
-
-.bh-halo {
-  background: radial-gradient(closest-side, transparent 55%, oklch(0.86 0.08 220 / 55%) 62%, oklch(0.72 0.15 295 / 25%) 70%, transparent 82%);
-  animation: bh-pulse 9s ease-in-out infinite;
+.cosmic-orbit {
+  border: 1px solid var(--glass-edge);
+  transform: rotate(-14deg) scaleY(0.4);
+  opacity: .4;
+  animation: cosmic-orbit 28s ease-in-out infinite alternate;
 }
-
-.bh-core {
-  background: radial-gradient(circle, var(--horizon) 58%, oklch(0.04 0.005 280 / 85%) 66%, transparent 72%);
-  box-shadow: 0 0 60px 10px oklch(0.04 0.005 280 / 90%);
-}
-
-.bh-photon {
-  border: 1.5px solid oklch(0.97 0.03 240 / 85%);
-  box-shadow: 0 0 18px 2px oklch(0.86 0.08 220 / 60%), inset 0 0 14px 1px oklch(0.86 0.08 220 / 50%);
-}
-
-@keyframes bh-spin { to { transform: rotate(360deg); } }
-@keyframes bh-pulse { 0%,100% { opacity: 0.75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+@keyframes cosmic-breathe { to { opacity: .5; transform: scale(1.08); } }
+@keyframes cosmic-orbit { to { transform: rotate(14deg) scaleY(.42); opacity: .18; } }
 
 .parallax-layer {
   transform: translate3d(calc(var(--px, 0) * var(--depth, 0) * 1px), calc(var(--py, 0) * var(--depth, 0) * 1px), 0);
@@ -274,7 +252,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .parallax-layer, .tilt-card, .magnetic { transform: none !important; }
+   .parallax-layer, .tilt-card, .magnetic { transform: none !important; }
   .chip { opacity: 1; }
   .reveal {
     opacity: 1;
