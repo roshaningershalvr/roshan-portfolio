@@ -113,14 +113,14 @@ function useReveal<T extends HTMLElement>() {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.dataset.visible = "true";
+      el.dataset["visible"] = "true";
       return;
     }
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            el.dataset.visible = "true";
+            el.dataset["visible"] = "true";
             observer.disconnect();
           }
         }
