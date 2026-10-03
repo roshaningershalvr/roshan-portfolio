@@ -405,8 +405,8 @@ function BlackHole() {
       </div>
       {/* back half of the tilted disk */}
       <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 18 }}>
-        <div className="absolute inset-0 [transform:rotateX(74deg)]" style={{ filter: "url(#lensing)" }}>
-          <div className="bh-disk absolute inset-[-10%] rounded-full" />
+        <div className="absolute inset-[-12%] [transform:rotateX(74deg)]" style={{ filter: "url(#lensing)" }}>
+          <div className="bh-disk absolute inset-0 rounded-full" />
         </div>
       </div>
       {/* lensed ring arching over the shadow */}
@@ -418,10 +418,10 @@ function BlackHole() {
       {/* front half of the disk crossing the shadow */}
       <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 34 }}>
         <div
-          className="absolute inset-0 [transform:rotateX(74deg)]"
+          className="absolute inset-[-12%] [transform:rotateX(74deg)]"
           style={{ maskImage: "linear-gradient(to bottom, transparent 42%, #000 58%)", filter: "url(#lensing)" }}
         >
-          <div className="bh-disk absolute inset-[-10%] rounded-full" />
+          <div className="bh-disk absolute inset-0 rounded-full" />
         </div>
       </div>
     </div>
