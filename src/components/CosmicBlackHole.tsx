@@ -191,7 +191,7 @@ export function CosmicBlackHole() {
         ctx.fill();
       }
       ctx.restore();
-      frame.dataset.ready = "true";
+      frame.dataset['ready'] = "true";
     };
 
     const tick = (stamp: number) => {

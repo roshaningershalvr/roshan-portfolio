@@ -8,10 +8,10 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CustomCursor } from "../components/CustomCursor";
 
 function NotFoundComponent() {
   return (
@@ -38,9 +38,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -78,10 +75,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Roshan Ingershal VR" },
+      { title: "VR Roshan Ingershal - Portfolio" },
       { name: "description", content: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist building intelligent systems, data-driven products and practical AI solutions." },
       { name: "author", content: "Roshan Ingershal VR" },
-      { property: "og:title", content: "Roshan Ingershal VR" },
+      { property: "og:title", content: "VR Roshan Ingershal - Portfolio" },
       { property: "og:description", content: "Building intelligent systems, data-driven products and practical AI solutions." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -98,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
   }),
   shellComponent: RootShell,
@@ -114,6 +111,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <CustomCursor />
         {children}
         <Scripts />
       </body>

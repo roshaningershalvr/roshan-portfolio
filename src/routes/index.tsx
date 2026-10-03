@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent as RPointerEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { CosmicBlackHole } from "@/components/CosmicBlackHole";
@@ -6,7 +6,7 @@ import { CosmicBlackHole } from "@/components/CosmicBlackHole";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist" },
+      { title: "V R Roshan Ingershal - Portfolio" },
       {
         name: "description",
         content:
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist",
+        content: "V R Roshan Ingershal - Portfolio",
       },
       {
         property: "og:description",
@@ -44,7 +44,7 @@ const NAV_SECTIONS = [
 const CURRENT_SKILL_GROUPS = [
   {
     title: "Languages",
-    skills: ["Python", "SQL", "JavaScript", "HTML", "CSS"],
+    skills: ["Python", "SQL", "JavaScript", "HTML", "CSS", "Java", "C", "C++", "TypeScript", "Rust", "Go", "Kotlin", "PHP", "C#", "Swift", "R"],
   },
   {
     title: "Frameworks & Tools",
@@ -52,27 +52,22 @@ const CURRENT_SKILL_GROUPS = [
   },
   {
     title: "Data & Interfaces",
-    skills: ["SQLite", "REST APIs"],
+    skills: ["SQLite", "REST APIs", "Apache Pig / Pig Latin"],
   },
 ] as const;
-
-const EXPANDING_LANGUAGES = ["Java", "C", "C++", "TypeScript", "Rust", "Go", "Kotlin", "PHP", "C#", "Swift", "R"];
 
 const PROJECTS = [
   {
     index: "01",
     title: "AI-Powered Anomaly Detection Dashboard",
-    overview: "Project overview coming soon",
   },
   {
     index: "02",
     title: "15-Puzzle Solver using IDA*",
-    overview: "Project overview coming soon",
   },
   {
     index: "03",
     title: "Route Optimization System",
-    overview: "Project overview coming soon",
   },
 ] as const;
 
@@ -173,11 +168,11 @@ function Nav() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40">
-      <div className="border-b border-line bg-background/55 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-4 z-40 flex justify-center px-4 sm:px-6">
+      <div className={`w-full max-w-5xl border-t border-white/10 border-b border-black/10 bg-background/30 backdrop-blur-xl shadow-lg ring-1 ring-white/5 transition-all duration-300 ${open ? 'rounded-3xl' : 'rounded-full'}`}>
         <nav
           aria-label="Primary"
-          className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8"
+          className="flex items-center justify-between gap-4 px-5 py-3 sm:px-8"
         >
           <a
             href="#top"
@@ -232,8 +227,8 @@ function Nav() {
         </nav>
 
         {open && (
-          <div id="mobile-menu" className="border-t border-line md:hidden">
-            <ul className="mx-auto flex max-w-5xl flex-col px-5 py-3 sm:px-8">
+          <div id="mobile-menu" className="border-t border-white/5 md:hidden">
+            <ul className="flex flex-col px-5 py-3 sm:px-8">
               {NAV_SECTIONS.map((s) => (
                 <li key={s.id}>
                   <a
@@ -273,7 +268,7 @@ function finePointer() {
   return typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
 }
 
-function Magnetic({ children, className = "", href }: { children: ReactNode; className?: string; href: string }) {
+function Magnetic({ children, className = "", href, "data-text": dataText }: { children: ReactNode; className?: string; href: string; "data-text"?: string }) {
   const ref = useRef<HTMLAnchorElement | null>(null);
   const onMove = (e: RPointerEvent) => {
     const el = ref.current;
@@ -287,7 +282,7 @@ function Magnetic({ children, className = "", href }: { children: ReactNode; cla
     if (ref.current) ref.current.style.transform = "";
   };
   return (
-    <a ref={ref} href={href} onPointerMove={onMove} onPointerLeave={reset} onBlur={reset} className={`magnetic ${className}`}>
+    <a ref={ref} href={href} data-text={dataText} onPointerMove={onMove} onPointerLeave={reset} onBlur={reset} className={`magnetic ${className}`}>
       {children}
     </a>
   );
@@ -424,15 +419,13 @@ function Hero() {
       </div>
 
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="pointer-events-none relative mx-auto -mb-3 w-full max-w-[920px] sm:-mb-12 lg:-mb-20">
-          <CosmicBlackHole />
-        </div>
+
 
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           <Reveal>
             <p className="eyebrow inline-flex items-center justify-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[var(--shadow-glow)]" />
-              Portfolio / AI · Data · Systems
+              Portfolio
             </p>
           </Reveal>
           <Reveal delay={80}>
@@ -460,7 +453,8 @@ function Hero() {
                 <span aria-hidden="true" className="ring-glow absolute inset-0 rounded-full opacity-80 blur-[1px]" />
                 <Magnetic
                   href="#projects"
-                  className="relative inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
+                  data-text="See my projects"
+                  className="btn-glitch relative inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
                 >
                   See my projects
                 </Magnetic>
@@ -473,6 +467,10 @@ function Hero() {
               </Magnetic>
             </div>
           </Reveal>
+        </div>
+
+        <div className="pointer-events-none relative mx-auto mt-12 w-full max-w-[920px] sm:mt-16 lg:mt-24">
+          <CosmicBlackHole />
         </div>
       </div>
     </section>
@@ -547,16 +545,6 @@ function Skills() {
             ))}
           </div>
         </div>
-        <Reveal>
-          <div className="mt-12 border-t border-line-strong pt-6">
-            <h3 className="text-sm font-semibold uppercase text-primary">Exploring / expanding</h3>
-            <p className="mt-2 text-sm text-foreground-muted">Languages I'm exploring, not a claim of proficiency.</p>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {EXPANDING_LANGUAGES.map((skill, i) => <li key={skill} style={{ ["--i" as string]: i }} className="chip rounded-md border border-line px-3 py-2 text-sm text-foreground-muted">{skill}</li>)}
-            </ul>
-            <div className="mt-7 flex flex-wrap items-center gap-3 text-sm"><span className="text-foreground-faint">Data ecosystem / exploring</span><span className="rounded-md border border-line px-3 py-2 text-foreground-muted">Apache Pig / Pig Latin</span></div>
-          </div>
-        </Reveal>
         </div>
     </section>
   );
@@ -581,7 +569,6 @@ function Projects() {
                 <h3 className="mt-6 font-display text-2xl leading-tight font-medium tracking-tight text-foreground">
                   {project.title}
                 </h3>
-                <p className="mt-6 italic text-foreground-faint">{project.overview}</p>
               </TiltCard>
             </Reveal>
           ))}
@@ -597,9 +584,31 @@ function InnovationLab() {
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <SectionHeading id="lab-title" eyebrow="Concepts / 02" title="Innovation Lab / Ideas" />
         <p className="mt-5 max-w-2xl text-foreground-muted">Early-stage thinking and proposals, distinct from completed projects.</p>
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <Reveal><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Concept / workforce intelligence</p><h3 className="mt-5 font-display text-2xl text-foreground">AI Workforce Operating System (WOS)</h3><p className="mt-4 leading-relaxed text-foreground-muted">A concept for mapping skills, identifying skill gaps, learning pathways, workforce demand, and reskilling insights for individuals, enterprises, and public-sector planning.</p></article></Reveal>
-          <Reveal delay={90}><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Selected idea / early-stage concept</p><h3 className="mt-5 font-display text-2xl text-foreground">MSME-Selected Innovation</h3><p className="mt-4 leading-relaxed text-foreground-muted">An idea selected in an MSME initiative: an early-stage industrial machine monitoring and sensing concept for capturing machine parameters.</p></article></Reveal>
+        <div className="mt-10 grid gap-5 md:grid-cols-1">
+          <Reveal>
+            <article className="glass h-full rounded-3xl p-8 sm:p-12 relative overflow-hidden group border border-white/5 hover:border-primary/30 transition-colors">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-soft to-transparent opacity-10 transition-opacity duration-500 group-hover:opacity-30 pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
+                <div className="max-w-3xl">
+                  <p className="eyebrow flex items-center gap-2 mb-4">
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[var(--shadow-glow)]" />
+                    Concept / workforce intelligence
+                  </p>
+                  <h3 className="font-display text-3xl sm:text-5xl font-medium text-foreground tracking-tight mb-6">AI Workforce Operating System (WOS)</h3>
+                  <p className="leading-relaxed text-foreground-muted text-lg sm:text-xl">An independent startup concept aiming to build intelligence infrastructure for the human skill economy. Featuring AI-powered skill mapping, gap detection, and predictive demand analytics.</p>
+                </div>
+                <div className="shrink-0 flex items-center justify-center">
+                  <Link
+                    to="/wos"
+                    className="btn-glitch relative inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-4 text-sm font-medium text-background transition-colors hover:bg-accent hover:scale-105"
+                    data-text="View Presentation"
+                  >
+                    View Presentation
+                  </Link>
+                </div>
+              </div>
+            </article>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -687,20 +696,16 @@ function Contact() {
           </Reveal>
           <Reveal delay={180}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <span className="inline-flex items-center rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background">
-                Email — coming soon
-              </span>
+              <a href="mailto:roshaningershalvr@gmail.com" className="inline-flex items-center rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-colors hover:bg-primary">
+                Email
+              </a>
               <div className="flex items-center gap-3">
-                {["GitHub", "LinkedIn"].map((label) => (
-                  <a
-                    key={label}
-                    href="#contact"
-                    aria-label={`${label} (link coming soon)`}
-                    className="glass inline-flex items-center rounded-full px-5 py-3 text-sm text-foreground-muted transition-colors hover:text-accent"
-                  >
-                    {label}
-                  </a>
-                ))}
+                <a href="https://github.com/roshaningershalvr" target="_blank" rel="noopener noreferrer" className="glass inline-flex items-center rounded-full px-5 py-3 text-sm text-foreground-muted transition-colors hover:text-accent hover:border-primary/50">
+                  GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/roshan-ingershal-vr-undefined-7a830a418" target="_blank" rel="noopener noreferrer" className="glass inline-flex items-center rounded-full px-5 py-3 text-sm text-foreground-muted transition-colors hover:text-accent hover:border-accent/50">
+                  LinkedIn
+                </a>
               </div>
             </div>
           </Reveal>
