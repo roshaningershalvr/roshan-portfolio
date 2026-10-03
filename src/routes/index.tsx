@@ -209,11 +209,12 @@ function Nav() {
 
           <Button
             type="button"
+            variant="ghost"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-line-strong text-foreground md:hidden"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-line-strong bg-background/50 p-0 text-foreground hover:bg-surface md:hidden"
           >
             <span aria-hidden="true" className="relative block h-3 w-4.5">
               <span
@@ -611,7 +612,7 @@ function InnovationLab() {
           <Reveal><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Concept / workforce intelligence</p><h3 className="mt-5 font-display text-2xl text-foreground">AI Workforce Operating System (WOS)</h3><p className="mt-4 leading-relaxed text-foreground-muted">A concept for mapping skills, identifying skill gaps, learning pathways, workforce demand, and reskilling insights for individuals, enterprises, and public-sector planning.</p></article></Reveal>
           <Reveal delay={90}><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Selected idea / early-stage concept</p><h3 className="mt-5 font-display text-2xl text-foreground">MSME-Selected Innovation</h3><p className="mt-4 leading-relaxed text-foreground-muted">An idea selected in an MSME initiative: an early-stage industrial machine monitoring and sensing concept for capturing machine parameters.</p></article></Reveal>
         </div>
-        <Reveal><article className="mt-5 flex flex-col gap-5 border-t border-line-strong py-7 sm:flex-row sm:items-center sm:justify-between"><div><p className="eyebrow">Hackathon achievement</p><h3 className="mt-2 font-display text-2xl text-foreground">Hackathon Winner</h3></div><p className="text-sm text-foreground-muted">Add event name · Add year · Add award/track</p></article></Reveal>
+        <Reveal><article className="glass mt-5 flex flex-col gap-5 rounded-lg p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"><div><p className="eyebrow">Hackathon achievement</p><h3 className="mt-2 font-display text-2xl text-foreground">Hackathon Winner</h3></div><p className="text-sm text-foreground-muted">Add event name · Add year · Add award/track</p></article></Reveal>
       </div>
     </section>
   );
