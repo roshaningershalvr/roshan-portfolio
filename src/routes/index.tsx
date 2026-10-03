@@ -1,23 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent as RPointerEvent } from "react";
+import { Button } from "@/components/ui/button";
+import blackHoleImage from "@/assets/black-hole-cinematic.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Roshan Ingershal VR — Software Engineer in the Making" },
+      { title: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist" },
       {
         name: "description",
         content:
-          "Portfolio of Roshan Ingershal VR — aspiring software engineer interested in AI, full-stack development and data science. B.E. CSE at J.N.N Institute of Engineering; B.S. Data Science at IIT Madras.",
+          "Roshan Ingershal VR — AI/ML Engineer & Data Scientist building intelligent systems, data-driven products and practical AI solutions.",
       },
       {
         property: "og:title",
-        content: "Roshan Ingershal VR — Software Engineer in the Making",
+        content: "Roshan Ingershal VR — AI/ML Engineer & Data Scientist",
       },
       {
         property: "og:description",
         content:
-          "Aspiring software engineer exploring AI, full-stack development and data science.",
+          "Building intelligent systems, data-driven products and practical AI solutions.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -33,59 +35,56 @@ const NAV_SECTIONS = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
+  { id: "lab", label: "Innovation Lab" },
   { id: "education", label: "Education" },
   { id: "exploring", label: "Exploring" },
   { id: "contact", label: "Contact" },
 ] as const;
 
-const SKILL_GROUPS = [
+const CURRENT_SKILL_GROUPS = [
   {
     title: "Languages",
-    note: "The foundations I write most of my code in.",
     skills: ["Python", "SQL", "JavaScript", "HTML", "CSS"],
   },
   {
     title: "Frameworks & Tools",
-    note: "What I reach for to build and ship.",
     skills: ["FastAPI", "Streamlit", "Git", "GitHub"],
   },
   {
     title: "Data & Interfaces",
-    note: "Where data meets the outside world.",
     skills: ["SQLite", "REST APIs"],
   },
 ] as const;
+
+const EXPANDING_LANGUAGES = ["Java", "C", "C++", "TypeScript", "Rust", "Go", "Kotlin", "PHP", "C#", "Swift", "R"];
 
 const PROJECTS = [
   {
     index: "01",
     title: "AI-Powered Anomaly Detection Dashboard",
-    tags: ["Python", "Streamlit", "AI"],
     overview: "Project overview coming soon",
   },
   {
     index: "02",
     title: "15-Puzzle Solver using IDA*",
-    tags: ["Python", "Algorithms"],
     overview: "Project overview coming soon",
   },
   {
     index: "03",
     title: "Route Optimization System",
-    tags: ["Python", "Algorithms"],
     overview: "Project overview coming soon",
   },
 ] as const;
 
 const EDUCATION = [
   {
-    period: "2024 — Present",
+    period: "Currently studying",
     degree: "B.E. Computer Science and Engineering",
     institution: "J.N.N Institute of Engineering",
     detail: "Second year",
   },
   {
-    period: "Ongoing",
+    period: "Currently studying",
     degree: "B.S. in Data Science (Foundation)",
     institution: "IIT Madras",
     detail: "Foundation level",
@@ -208,13 +207,14 @@ function Nav() {
             Get in touch
           </a>
 
-          <button
+          <Button
             type="button"
+            variant="ghost"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-line-strong text-foreground md:hidden"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-line-strong bg-background/50 p-0 text-foreground hover:bg-surface md:hidden"
           >
             <span aria-hidden="true" className="relative block h-3 w-4.5">
               <span
@@ -228,7 +228,7 @@ function Nav() {
                 }`}
               />
             </span>
-          </button>
+          </Button>
         </nav>
 
         {open && (
@@ -388,42 +388,13 @@ function Starfield() {
   return <canvas ref={ref} aria-hidden="true" className="absolute inset-0 h-full w-full" />;
 }
 
-/* Black hole: pure CSS + SVG, lensing via an SVG displacement filter. */
+/* A locally authored cinematic image carries the lensing detail; restrained layers add depth without WebGL cost. */
 function BlackHole() {
   return (
-    <div aria-hidden="true" className="relative aspect-square w-full">
-      <svg className="absolute h-0 w-0">
-        <filter id="lensing" x="-50%" y="-150%" width="200%" height="400%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4">
-            <animate attributeName="baseFrequency" dur="24s" values="0.012;0.016;0.012" repeatCount="indefinite" />
-          </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" scale="14" />
-        </filter>
-      </svg>
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 10 }}>
-        <div className="bh-halo absolute inset-[4%] rounded-full" />
-      </div>
-      {/* back half of the tilted disk */}
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 18 }}>
-        <div className="absolute inset-[-12%] [transform:rotateX(74deg)]" style={{ filter: "url(#lensing)" }}>
-          <div className="bh-disk absolute inset-0 rounded-full" />
-        </div>
-      </div>
-      {/* lensed ring arching over the shadow */}
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 26 }}>
-        <div className="bh-disk absolute inset-[18%] rounded-full opacity-80" style={{ animationDuration: "60s", animationDirection: "reverse" }} />
-        <div className="bh-core absolute inset-[30%] rounded-full" />
-        <div className="bh-photon absolute inset-[30.5%] rounded-full" />
-      </div>
-      {/* front half of the disk crossing the shadow */}
-      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 34 }}>
-        <div
-          className="absolute inset-[-12%] [transform:rotateX(74deg)]"
-          style={{ maskImage: "linear-gradient(to bottom, transparent 42%, #000 58%)", filter: "url(#lensing)" }}
-        >
-          <div className="bh-disk absolute inset-0 rounded-full" />
-        </div>
-      </div>
+    <div aria-hidden="true" className="cosmic-object parallax-layer relative w-full aspect-[3/2]" style={{ ["--depth" as string]: 14 }}>
+      <div className="cosmic-aura absolute inset-[12%] rounded-full" />
+      <img src={blackHoleImage} width={1536} height={1024} alt="" fetchPriority="high" className="cosmic-image relative h-full w-full object-contain" />
+      <div className="cosmic-orbit absolute inset-[21%_9%] rounded-full" />
     </div>
   );
 }
@@ -451,7 +422,7 @@ function Hero() {
   }, []);
 
   return (
-    <section id="top" ref={ref} className="relative isolate overflow-hidden pt-28 pb-20 sm:pt-36 lg:min-h-[100svh] lg:pb-28">
+    <section id="top" ref={ref} className="relative isolate overflow-hidden pt-24 pb-16 sm:pt-28 sm:pb-20">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         <Starfield />
         <div
@@ -463,35 +434,39 @@ function Hero() {
         />
       </div>
 
-      <div className="mx-auto grid max-w-6xl items-center gap-6 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-4">
-        <div className="pointer-events-none order-1 mx-auto w-[78%] max-w-[300px] sm:max-w-[380px] lg:order-2 lg:w-full lg:max-w-[560px]">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="pointer-events-none relative mx-auto -mb-3 w-full max-w-[920px] sm:-mb-12 lg:-mb-20">
           <BlackHole />
         </div>
 
-        <div className="relative order-2 lg:order-1">
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
           <Reveal>
-            <p className="eyebrow inline-flex items-center gap-2">
+            <p className="eyebrow inline-flex items-center justify-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[var(--shadow-glow)]" />
-              Portfolio — Roshan Ingershal VR
+              Portfolio / AI · Data · Systems
             </p>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-6 font-display text-5xl leading-[1.03] font-medium tracking-tight text-foreground sm:text-7xl">
-              Aspiring software engineer, building with{" "}
-              <span className="text-gradient-signal italic">intent</span>.
+            <h1 className="mt-5 font-display text-[clamp(2.7rem,6vw,5.5rem)] leading-[1.08] font-medium text-foreground">
+              Roshan Ingershal VR<span className="text-primary">.</span>
             </h1>
           </Reveal>
           <Reveal delay={160}>
-            <div className="glass glass-edge-glow mt-8 max-w-xl rounded-2xl p-5 sm:p-6">
-              <p className="text-base leading-relaxed text-foreground-muted sm:text-lg">
-                I'm interested in artificial intelligence, full-stack development and data
-                science — and I'm putting in the reps: studying, building, and learning in
-                public.
-              </p>
-            </div>
+            <p className="mt-3 text-sm font-semibold uppercase text-accent sm:text-base">AI/ML Engineer &amp; Data Scientist</p>
           </Reveal>
           <Reveal delay={240}>
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-foreground-muted sm:text-xl">
+              Building intelligent systems, data-driven products, and practical AI solutions.
+            </p>
+          </Reveal>
+          <Reveal delay={280}>
+            <div className="mt-7 flex flex-wrap justify-center gap-2 text-left">
+              <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">IIT Madras · BS Data Science (Foundation)</span>
+              <span className="glass inline-flex max-w-full items-center rounded-md px-3 py-2 text-xs text-foreground-muted sm:text-sm">B.E. Computer Science Engineering · J.N.N. Institute of Engineering</span>
+            </div>
+          </Reveal>
+          <Reveal delay={320}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <span className="relative inline-flex rounded-full p-px">
                 <span aria-hidden="true" className="ring-glow absolute inset-0 rounded-full opacity-80 blur-[1px]" />
                 <Magnetic
@@ -515,12 +490,12 @@ function Hero() {
   );
 }
 
-function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
+function SectionHeading({ eyebrow, title, id }: { eyebrow: string; title: string; id: string }) {
   return (
     <Reveal>
       <div>
         <p className="eyebrow">{eyebrow}</p>
-        <h2 className="mt-3 font-display text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+        <h2 id={id} className="mt-3 font-display text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
           {title}
         </h2>
       </div>
@@ -533,7 +508,7 @@ function About() {
     <section id="about" aria-labelledby="about-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto grid max-w-5xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
-          <SectionHeading eyebrow="About" title="A quick intro" />
+          <SectionHeading id="about-title" eyebrow="About" title="A quick intro" />
         </div>
         <div className="space-y-6 text-lg leading-relaxed text-foreground-muted">
           <Reveal>
@@ -567,34 +542,33 @@ function Skills() {
   return (
     <section id="skills" aria-labelledby="skills-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Skills" title="Tools I work with" />
-
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {SKILL_GROUPS.map((group, i) => (
-            <Reveal key={group.title} delay={i * 90}>
-              <div className="h-full glass glass-edge-glow rounded-2xl p-6 transition-colors duration-300 hover:border-line-strong">
-                <h3 className="font-display text-xl font-medium text-foreground">
-                  {group.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-foreground-faint">
-                  {group.note}
-                </p>
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {group.skills.map((skill, si) => (
-                    <li
-                      key={skill}
-                      style={{ ["--i" as string]: si }}
-                      className="chip rounded-full border border-line-strong px-3 py-1 text-xs font-medium tracking-wide text-foreground-muted transition-colors hover:border-primary hover:text-primary"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          ))}
+        <SectionHeading id="skills-title" eyebrow="Capabilities / 01" title="Languages & Technologies" />
+        <div className="mt-10 border-t border-line-strong pt-6">
+          <h3 className="mb-6 flex items-center gap-3 text-sm font-semibold uppercase text-accent"><span className="h-1.5 w-1.5 rounded-full bg-accent" />Current skills</h3>
+          <div className="grid gap-8 md:grid-cols-3">
+            {CURRENT_SKILL_GROUPS.map((group, i) => (
+              <Reveal key={group.title} delay={i * 90}>
+                <div className="border-l border-line-strong pl-5">
+                  <h4 className="text-xs uppercase text-foreground-faint">{group.title}</h4>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {group.skills.map((skill, si) => <li key={skill} style={{ ["--i" as string]: si }} className="chip rounded-md border border-line-strong bg-surface px-3 py-2 text-sm text-foreground transition-colors hover:border-primary">{skill}</li>)}
+                  </ul>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
-      </div>
+        <Reveal>
+          <div className="mt-12 border-t border-line-strong pt-6">
+            <h3 className="text-sm font-semibold uppercase text-primary">Exploring / expanding</h3>
+            <p className="mt-2 text-sm text-foreground-muted">Languages I'm exploring, not a claim of proficiency.</p>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {EXPANDING_LANGUAGES.map((skill, i) => <li key={skill} style={{ ["--i" as string]: i }} className="chip rounded-md border border-line px-3 py-2 text-sm text-foreground-muted">{skill}</li>)}
+            </ul>
+            <div className="mt-7 flex flex-wrap items-center gap-3 text-sm"><span className="text-foreground-faint">Data ecosystem / exploring</span><span className="rounded-md border border-line px-3 py-2 text-foreground-muted">Apache Pig / Pig Latin</span></div>
+          </div>
+        </Reveal>
+        </div>
     </section>
   );
 }
@@ -603,7 +577,7 @@ function Projects() {
   return (
     <section id="projects" aria-labelledby="projects-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Projects" title="Featured work" />
+        <SectionHeading id="projects-title" eyebrow="Projects" title="Featured work" />
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {PROJECTS.map((project, i) => (
@@ -618,13 +592,6 @@ function Projects() {
                 <h3 className="mt-6 font-display text-2xl leading-tight font-medium tracking-tight text-foreground">
                   {project.title}
                 </h3>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <li key={tag} className="rounded-full border border-line-strong px-2.5 py-0.5 text-xs text-foreground-muted">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
                 <p className="mt-6 italic text-foreground-faint">{project.overview}</p>
               </TiltCard>
             </Reveal>
@@ -635,12 +602,28 @@ function Projects() {
   );
 }
 
+function InnovationLab() {
+  return (
+    <section id="lab" aria-labelledby="lab-title" className="hairline-top py-20 sm:py-28">
+      <div className="mx-auto max-w-5xl px-5 sm:px-8">
+        <SectionHeading id="lab-title" eyebrow="Concepts / 02" title="Innovation Lab / Ideas" />
+        <p className="mt-5 max-w-2xl text-foreground-muted">Early-stage thinking and proposals, distinct from completed projects.</p>
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          <Reveal><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Concept / workforce intelligence</p><h3 className="mt-5 font-display text-2xl text-foreground">AI Workforce Operating System (WOS)</h3><p className="mt-4 leading-relaxed text-foreground-muted">A concept for mapping skills, identifying skill gaps, learning pathways, workforce demand, and reskilling insights for individuals, enterprises, and public-sector planning.</p></article></Reveal>
+          <Reveal delay={90}><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Selected idea / early-stage concept</p><h3 className="mt-5 font-display text-2xl text-foreground">MSME-Selected Innovation</h3><p className="mt-4 leading-relaxed text-foreground-muted">An idea selected in an MSME initiative: an early-stage industrial machine monitoring and sensing concept for capturing machine parameters.</p></article></Reveal>
+        </div>
+        <Reveal><article className="glass mt-5 flex flex-col gap-5 rounded-lg p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"><div><p className="eyebrow">Hackathon achievement</p><h3 className="mt-2 font-display text-2xl text-foreground">Hackathon Winner</h3></div><p className="text-sm text-foreground-muted">Add event name · Add year · Add award/track</p></article></Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Education() {
   return (
     <section id="education" aria-labelledby="education-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto grid max-w-5xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
-          <SectionHeading eyebrow="Education" title="Where I study" />
+          <SectionHeading id="education-title" eyebrow="Education" title="Where I study" />
         </div>
         <ol className="relative space-y-12 border-l border-line pl-8">
           {EDUCATION.map((item, i) => (
@@ -671,7 +654,7 @@ function Exploring() {
   return (
     <section id="exploring" aria-labelledby="exploring-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Right now" title="Currently exploring" />
+        <SectionHeading id="exploring-title" eyebrow="Right now" title="Currently exploring" />
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {EXPLORING.map((item, i) => (
@@ -704,7 +687,7 @@ function Contact() {
           }}
         >
           <Reveal>
-            <h2 className="mx-auto max-w-2xl font-display text-3xl font-medium tracking-tight text-foreground sm:text-5xl">
+            <h2 id="contact-title" className="mx-auto max-w-2xl font-display text-3xl font-medium tracking-tight text-foreground sm:text-5xl">
               Let's build something worth talking about.
             </h2>
           </Reveal>
@@ -768,6 +751,7 @@ function Index() {
         <About />
         <Skills />
         <Projects />
+        <InnovationLab />
         <Education />
         <Exploring />
         <Contact />
