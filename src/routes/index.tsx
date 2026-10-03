@@ -19,6 +19,9 @@ export const Route = createFileRoute("/")({
         content:
           "Aspiring software engineer exploring AI, full-stack development and data science.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#07070c" },
     ],
   }),
   component: Index,
@@ -172,7 +175,7 @@ function Nav() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-40">
-      <div className="border-b border-line bg-background/80 backdrop-blur-md">
+      <div className="border-b border-line bg-background/55 backdrop-blur-xl">
         <nav
           aria-label="Primary"
           className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8"
@@ -261,50 +264,252 @@ function Nav() {
 
 /* ---------------------------- sections ---------------------------- */
 
-function Hero() {
+/* --------------------------- interactions --------------------------- */
+
+function prefersReduced() {
+  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+function finePointer() {
+  return typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
+}
+
+function Magnetic({ children, className = "", href }: { children: ReactNode; className?: string; href: string }) {
+  const ref = useRef<HTMLAnchorElement | null>(null);
+  const onMove = (e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el || prefersReduced() || !finePointer()) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.25;
+    const y = (e.clientY - r.top - r.height / 2) * 0.35;
+    el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  };
+  const reset = () => {
+    if (ref.current) ref.current.style.transform = "";
+  };
   return (
-    <section id="top" className="relative overflow-hidden pt-40 pb-24 sm:pt-48 sm:pb-32">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 45% at 18% 0%, var(--primary-soft), transparent 65%), radial-gradient(ellipse 45% 40% at 85% 15%, var(--accent-soft), transparent 60%)",
-        }}
-      />
-      <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <Reveal>
-          <p className="eyebrow">Portfolio — Roshan Ingershal VR</p>
-        </Reveal>
-        <Reveal delay={80}>
-          <h1 className="mt-6 max-w-3xl font-display text-5xl leading-[1.05] font-medium tracking-tight text-foreground sm:text-7xl">
-            Aspiring software engineer, building with{" "}
-            <span className="text-gradient-signal italic">intent</span>.
-          </h1>
-        </Reveal>
-        <Reveal delay={160}>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-foreground-muted">
-            I'm interested in artificial intelligence, full-stack development and data
-            science — and I'm putting in the reps: studying, building, and learning in
-            public.
-          </p>
-        </Reveal>
-        <Reveal delay={240}>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <a
-              href="#projects"
-              className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-primary"
-            >
-              See my projects
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 rounded-full border border-line-strong px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
-            >
-              Get in touch
-            </a>
-          </div>
-        </Reveal>
+    <a ref={ref} href={href} onPointerMove={onMove} onPointerLeave={reset} onBlur={reset} className={`magnetic ${className}`}>
+      {children}
+    </a>
+  );
+}
+
+function TiltCard({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLElement | null>(null);
+  const onMove = (e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el || !finePointer()) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
+    if (prefersReduced()) return;
+    el.style.setProperty("--rx", ((px - 0.5) * 5).toFixed(2));
+    el.style.setProperty("--ry", ((0.5 - py) * 5).toFixed(2));
+  };
+  const reset = () => {
+    ref.current?.style.setProperty("--rx", "0");
+    ref.current?.style.setProperty("--ry", "0");
+  };
+  return (
+    <article
+      ref={ref}
+      onPointerMove={onMove}
+      onPointerLeave={reset}
+      className={`tilt-card glass glass-edge-glow group overflow-hidden rounded-3xl ${className}`}
+    >
+      <div aria-hidden="true" className="shine pointer-events-none absolute inset-0" />
+      <div className="relative">{children}</div>
+    </article>
+  );
+}
+
+/* Starfield: a single canvas, slow orbital drift around the hero focus. */
+function Starfield() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const reduced = prefersReduced();
+    let w = 0, h = 0, raf = 0, visible = true;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    type Star = { r: number; a: number; s: number; size: number; o: number; tint: number };
+    let stars: Star[] = [];
+    const resize = () => {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.round(Math.min(220, (w * h) / 6000));
+      const maxR = Math.hypot(w, h) * 0.6;
+      stars = Array.from({ length: count }, () => ({
+        r: 40 + Math.random() * maxR,
+        a: Math.random() * Math.PI * 2,
+        s: (0.00004 + Math.random() * 0.00012) * (Math.random() < 0.5 ? 1 : 1),
+        size: Math.random() * 1.3 + 0.2,
+        o: Math.random() * 0.7 + 0.15,
+        tint: Math.random(),
+      }));
+    };
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, w, h);
+      const cx = w * (w > 900 ? 0.68 : 0.5);
+      const cy = h * (w > 900 ? 0.48 : 0.3);
+      for (const st of stars) {
+        const ang = st.a + (reduced ? 0 : t * st.s);
+        const x = cx + Math.cos(ang) * st.r;
+        const y = cy + Math.sin(ang) * st.r * 0.55;
+        const tw = reduced ? 1 : 0.75 + 0.25 * Math.sin(t * 0.001 + st.a * 10);
+        ctx.globalAlpha = st.o * tw;
+        ctx.fillStyle = st.tint > 0.85 ? "#c9b8ff" : st.tint > 0.7 ? "#bfe6ff" : "#eef2ff";
+        ctx.fillRect(x, y, st.size, st.size);
+      }
+      ctx.globalAlpha = 1;
+    };
+    const loop = (t: number) => {
+      if (visible) draw(t);
+      raf = requestAnimationFrame(loop);
+    };
+    resize();
+    const io = new IntersectionObserver(([e]) => (visible = !!e?.isIntersecting));
+    io.observe(canvas);
+    window.addEventListener("resize", resize);
+    if (reduced) draw(0);
+    else raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+  return <canvas ref={ref} aria-hidden="true" className="absolute inset-0 h-full w-full" />;
+}
+
+/* Black hole: pure CSS + SVG, lensing via an SVG displacement filter. */
+function BlackHole() {
+  return (
+    <div aria-hidden="true" className="relative aspect-square w-full">
+      <svg className="absolute h-0 w-0">
+        <filter id="lensing">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4">
+            <animate attributeName="baseFrequency" dur="24s" values="0.012;0.016;0.012" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" scale="14" />
+        </filter>
+      </svg>
+      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 10 }}>
+        <div className="bh-halo absolute inset-[4%] rounded-full" />
+      </div>
+      {/* back half of the tilted disk */}
+      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 18 }}>
+        <div className="absolute inset-0 [transform:rotateX(74deg)]" style={{ filter: "url(#lensing)" }}>
+          <div className="bh-disk absolute inset-[-10%] rounded-full" />
+        </div>
+      </div>
+      {/* lensed ring arching over the shadow */}
+      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 26 }}>
+        <div className="bh-disk absolute inset-[18%] rounded-full opacity-80" style={{ animationDuration: "60s", animationDirection: "reverse" }} />
+        <div className="bh-core absolute inset-[30%] rounded-full" />
+        <div className="bh-photon absolute inset-[30.5%] rounded-full" />
+      </div>
+      {/* front half of the disk crossing the shadow */}
+      <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 34 }}>
+        <div
+          className="absolute inset-0 [transform:rotateX(74deg)]"
+          style={{ clipPath: "inset(50% 0 0 0)", filter: "url(#lensing)" }}
+        >
+          <div className="bh-disk absolute inset-[-10%] rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  const ref = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReduced() || !finePointer()) return;
+    let raf = 0;
+    const onMove = (e: PointerEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const x = e.clientX / window.innerWidth - 0.5;
+        const y = e.clientY / window.innerHeight - 0.5;
+        el.style.setProperty("--px", x.toFixed(3));
+        el.style.setProperty("--py", y.toFixed(3));
+      });
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("pointermove", onMove);
+    };
+  }, []);
+
+  return (
+    <section id="top" ref={ref} className="relative isolate overflow-hidden pt-28 pb-20 sm:pt-36 lg:min-h-[100svh] lg:pb-28">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <Starfield />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 50% 40% at 70% 45%, var(--primary-soft), transparent 70%), radial-gradient(ellipse 40% 30% at 15% 10%, var(--accent-soft), transparent 70%), linear-gradient(to bottom, transparent 70%, var(--background))",
+          }}
+        />
+      </div>
+
+      <div className="mx-auto grid max-w-6xl items-center gap-6 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-4">
+        <div className="pointer-events-none order-1 mx-auto w-[78%] max-w-[300px] sm:max-w-[380px] lg:order-2 lg:w-full lg:max-w-[560px]">
+          <BlackHole />
+        </div>
+
+        <div className="relative order-2 lg:order-1">
+          <Reveal>
+            <p className="eyebrow inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[var(--shadow-glow)]" />
+              Portfolio — Roshan Ingershal VR
+            </p>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-6 font-display text-5xl leading-[1.03] font-medium tracking-tight text-foreground sm:text-7xl">
+              Aspiring software engineer, building with{" "}
+              <span className="text-gradient-signal italic">intent</span>.
+            </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <div className="glass glass-edge-glow mt-8 max-w-xl rounded-2xl p-5 sm:p-6">
+              <p className="text-base leading-relaxed text-foreground-muted sm:text-lg">
+                I'm interested in artificial intelligence, full-stack development and data
+                science — and I'm putting in the reps: studying, building, and learning in
+                public.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={240}>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <span className="relative inline-flex rounded-full p-px">
+                <span aria-hidden="true" className="ring-glow absolute inset-0 rounded-full opacity-80 blur-[1px]" />
+                <Magnetic
+                  href="#projects"
+                  className="relative inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent"
+                >
+                  See my projects
+                </Magnetic>
+              </span>
+              <Magnetic
+                href="#contact"
+                className="glass inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-foreground transition-colors hover:text-accent"
+              >
+                Get in touch
+              </Magnetic>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -367,7 +572,7 @@ function Skills() {
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {SKILL_GROUPS.map((group, i) => (
             <Reveal key={group.title} delay={i * 90}>
-              <div className="h-full rounded-2xl border border-line bg-surface/60 p-6 transition-colors duration-300 hover:border-line-strong">
+              <div className="h-full glass glass-edge-glow rounded-2xl p-6 transition-colors duration-300 hover:border-line-strong">
                 <h3 className="font-display text-xl font-medium text-foreground">
                   {group.title}
                 </h3>
@@ -375,10 +580,11 @@ function Skills() {
                   {group.note}
                 </p>
                 <ul className="mt-5 flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
+                  {group.skills.map((skill, si) => (
                     <li
                       key={skill}
-                      className="rounded-full border border-line-strong px-3 py-1 text-xs font-medium tracking-wide text-foreground-muted transition-colors hover:border-primary hover:text-primary"
+                      style={{ ["--i" as string]: si }}
+                      className="chip rounded-full border border-line-strong px-3 py-1 text-xs font-medium tracking-wide text-foreground-muted transition-colors hover:border-primary hover:text-primary"
                     >
                       {skill}
                     </li>
@@ -399,35 +605,28 @@ function Projects() {
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <SectionHeading eyebrow="Projects" title="Featured work" />
 
-        <div className="mt-12 flex flex-col">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {PROJECTS.map((project, i) => (
-            <Reveal key={project.title} delay={i * 80}>
-              <article className="group hairline-top grid gap-6 py-10 transition-colors duration-300 sm:grid-cols-[auto_1fr] sm:gap-10">
+            <Reveal key={project.title} delay={i * 90} className="h-full">
+              <TiltCard className="h-full p-7">
                 <span
                   aria-hidden="true"
-                  className="font-display text-sm text-foreground-faint transition-colors duration-300 group-hover:text-primary"
+                  className="font-display text-sm text-foreground-faint transition-colors duration-300 group-hover:text-accent"
                 >
                   {project.index}
                 </span>
-                <div className="min-w-0">
-                  <h3 className="font-display text-2xl font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary sm:text-3xl">
-                    {project.title}
-                  </h3>
-                  <ul className="mt-3 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="rounded-full border border-line px-2.5 py-0.5 text-xs text-foreground-faint"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mt-4 max-w-2xl italic text-foreground-muted">
-                    {project.overview}
-                  </p>
-                </div>
-              </article>
+                <h3 className="mt-6 font-display text-2xl leading-tight font-medium tracking-tight text-foreground">
+                  {project.title}
+                </h3>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <li key={tag} className="rounded-full border border-line-strong px-2.5 py-0.5 text-xs text-foreground-muted">
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-6 italic text-foreground-faint">{project.overview}</p>
+              </TiltCard>
             </Reveal>
           ))}
         </div>
@@ -477,7 +676,7 @@ function Exploring() {
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {EXPLORING.map((item, i) => (
             <Reveal key={item.area} delay={i * 90}>
-              <div className="h-full rounded-2xl border border-line bg-surface/60 p-6 transition-colors duration-300 hover:border-line-strong">
+              <div className="h-full glass glass-edge-glow rounded-2xl p-6 transition-colors duration-300 hover:border-line-strong">
                 <h3 className="font-display text-xl font-medium text-foreground">
                   {item.area}
                 </h3>
@@ -498,10 +697,10 @@ function Contact() {
     <section id="contact" aria-labelledby="contact-title" className="hairline-top py-24 sm:py-36">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <div
-          className="relative overflow-hidden rounded-3xl border border-line bg-surface/60 px-6 py-16 text-center sm:px-16 sm:py-20"
+          className="glass glass-edge-glow relative overflow-hidden rounded-3xl px-6 py-16 text-center sm:px-16 sm:py-20"
           style={{
             background:
-              "radial-gradient(ellipse 70% 90% at 50% 120%, var(--primary-soft), transparent 70%), var(--surface)",
+              "radial-gradient(ellipse 70% 90% at 50% 120%, var(--primary-soft), transparent 70%), var(--glass)",
           }}
         >
           <Reveal>
@@ -517,19 +716,16 @@ function Contact() {
           </Reveal>
           <Reveal delay={180}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="mailto:hello@example.com"
-                className="inline-flex items-center rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-colors hover:bg-primary"
-              >
-                Email me
-              </a>
+              <span className="inline-flex items-center rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background">
+                Email — coming soon
+              </span>
               <div className="flex items-center gap-3">
                 {["GitHub", "LinkedIn"].map((label) => (
                   <a
                     key={label}
                     href="#contact"
                     aria-label={`${label} (link coming soon)`}
-                    className="inline-flex items-center rounded-full border border-line-strong px-5 py-3 text-sm text-foreground-muted transition-colors hover:border-accent hover:text-accent"
+                    className="glass inline-flex items-center rounded-full px-5 py-3 text-sm text-foreground-muted transition-colors hover:text-accent"
                   >
                     {label}
                   </a>
