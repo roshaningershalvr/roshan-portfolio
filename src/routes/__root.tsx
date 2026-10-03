@@ -85,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Aspiring software engineer exploring AI, full-stack development and data science." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "theme-color", content: "#121217" },
+      { name: "theme-color", content: "#07070c" },
     ],
     links: [
       {

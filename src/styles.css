@@ -32,6 +32,7 @@
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-ring: var(--ring);
+  --color-horizon: var(--horizon);
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
@@ -39,28 +40,35 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.875rem;
 
-  /* Base — near-black charcoal with a faint cool cast */
-  --background: oklch(0.155 0.012 275);
-  --surface: oklch(0.19 0.014 275);
-  --surface-raised: oklch(0.225 0.016 275);
-  --foreground: oklch(0.93 0.008 275);
-  --foreground-muted: oklch(0.72 0.014 275);
-  --foreground-faint: oklch(0.56 0.016 275);
+  /* Base — deep near-black space */
+  --background: oklch(0.11 0.012 280);
+  --surface: oklch(0.16 0.018 280);
+  --surface-raised: oklch(0.2 0.02 280);
+  --foreground: oklch(0.95 0.008 260);
+  --foreground-muted: oklch(0.76 0.016 265);
+  --foreground-faint: oklch(0.6 0.02 270);
 
-  /* Accents — restrained violet + cyan */
-  --primary: oklch(0.68 0.16 295);
-  --primary-soft: oklch(0.68 0.16 295 / 14%);
-  --accent: oklch(0.8 0.11 205);
-  --accent-soft: oklch(0.8 0.11 205 / 12%);
+  /* Accents — restrained violet + ice blue */
+  --primary: oklch(0.72 0.15 295);
+  --primary-soft: oklch(0.72 0.15 295 / 16%);
+  --accent: oklch(0.86 0.08 220);
+  --accent-soft: oklch(0.86 0.08 220 / 14%);
+  --horizon: oklch(0.04 0.005 280);
 
-  /* Lines & focus */
-  --line: oklch(0.93 0.008 275 / 9%);
-  --line-strong: oklch(0.93 0.008 275 / 18%);
-  --ring: oklch(0.8 0.11 205);
+  /* Glass */
+  --glass: oklch(0.22 0.02 280 / 38%);
+  --glass-strong: oklch(0.24 0.025 280 / 55%);
+  --glass-edge: oklch(0.95 0.02 260 / 12%);
+  --glass-edge-bright: oklch(0.9 0.08 230 / 35%);
 
-  --shadow-card: 0 24px 48px -24px oklch(0 0 0 / 60%);
+  --line: oklch(0.95 0.01 260 / 9%);
+  --line-strong: oklch(0.95 0.01 260 / 18%);
+  --ring: oklch(0.86 0.08 220);
+
+  --shadow-card: 0 30px 60px -30px oklch(0 0 0 / 70%);
+  --shadow-glow: 0 0 40px -8px oklch(0.72 0.15 295 / 45%);
   --texture-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
@@ -141,6 +149,115 @@
   color: var(--color-foreground-faint);
 }
 
+/* ---------- Glass ---------- */
+
+@utility glass {
+  position: relative;
+  background: linear-gradient(160deg, var(--glass-strong), var(--glass));
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 0 var(--glass-edge), var(--shadow-card);
+}
+
+@utility glass-edge-glow {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--glass-edge-bright), transparent 40%, transparent 60%, var(--primary-soft));
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* ---------- Black hole ---------- */
+
+.bh-disk {
+  background: conic-gradient(
+    from 0deg,
+    oklch(0.86 0.08 220 / 0%),
+    oklch(0.86 0.08 220 / 85%) 12%,
+    oklch(0.97 0.02 260 / 95%) 18%,
+    oklch(0.72 0.15 295 / 80%) 30%,
+    oklch(0.72 0.15 295 / 10%) 48%,
+    oklch(0.86 0.08 220 / 0%) 55%,
+    oklch(0.72 0.15 295 / 40%) 72%,
+    oklch(0.86 0.08 220 / 70%) 88%,
+    oklch(0.86 0.08 220 / 0%)
+  );
+  mask: radial-gradient(closest-side, transparent 52%, #000 60%, #000 74%, transparent 100%);
+  filter: blur(6px);
+  animation: bh-spin 40s linear infinite;
+}
+
+.bh-halo {
+  background: radial-gradient(closest-side, transparent 55%, oklch(0.86 0.08 220 / 55%) 62%, oklch(0.72 0.15 295 / 25%) 70%, transparent 82%);
+  animation: bh-pulse 9s ease-in-out infinite;
+}
+
+.bh-core {
+  background: radial-gradient(circle, var(--horizon) 58%, oklch(0.04 0.005 280 / 85%) 66%, transparent 72%);
+  box-shadow: 0 0 60px 10px oklch(0.04 0.005 280 / 90%);
+}
+
+.bh-photon {
+  border: 1.5px solid oklch(0.97 0.03 240 / 85%);
+  box-shadow: 0 0 18px 2px oklch(0.86 0.08 220 / 60%), inset 0 0 14px 1px oklch(0.86 0.08 220 / 50%);
+}
+
+@keyframes bh-spin { to { transform: rotate(360deg); } }
+@keyframes bh-pulse { 0%,100% { opacity: 0.75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+
+.parallax-layer {
+  transform: translate3d(calc(var(--px, 0) * var(--depth, 0) * 1px), calc(var(--py, 0) * var(--depth, 0) * 1px), 0);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ---------- Chips / cards ---------- */
+
+.chip {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, color 0.3s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+}
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, oklch(0.95 0.02 240 / 18%) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+.chip:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+.chip:hover::after { transform: translateX(120%); }
+
+.reveal[data-visible="true"] .chip { animation: chip-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 60ms + 150ms); }
+@keyframes chip-in { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+.tilt-card {
+  transform: perspective(900px) rotateX(calc(var(--ry, 0) * 1deg)) rotateY(calc(var(--rx, 0) * 1deg));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s;
+}
+.tilt-card .shine {
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), oklch(0.86 0.08 220 / 12%), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.tilt-card:hover .shine { opacity: 1; }
+
+.ring-glow {
+  background: conic-gradient(from var(--angle, 0deg), var(--primary), var(--accent), transparent 40%, var(--primary));
+  animation: ring-rotate 6s linear infinite;
+}
+@property --angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes ring-rotate { to { --angle: 360deg; } }
+
+.magnetic { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+
 /* ---------- Motion (reveal on scroll) ---------- */
 
 .reveal {
@@ -157,6 +274,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .parallax-layer, .tilt-card, .magnetic { transform: none !important; }
+  .chip { opacity: 1; }
   .reveal {
     opacity: 1;
     transform: none;
