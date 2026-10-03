@@ -419,7 +419,7 @@ function BlackHole() {
       <div className="parallax-layer absolute inset-0" style={{ ["--depth" as string]: 34 }}>
         <div
           className="absolute inset-0 [transform:rotateX(74deg)]"
-          style={{ clipPath: "inset(50% 0 0 0)", filter: "url(#lensing)" }}
+          style={{ clipPath: "inset(50% -25% -25% -25%)", filter: "url(#lensing)" }}
         >
           <div className="bh-disk absolute inset-[-10%] rounded-full" />
         </div>
