@@ -393,7 +393,7 @@ function BlackHole() {
   return (
     <div aria-hidden="true" className="relative aspect-square w-full">
       <svg className="absolute h-0 w-0">
-        <filter id="lensing">
+        <filter id="lensing" x="-50%" y="-150%" width="200%" height="400%">
           <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="4">
             <animate attributeName="baseFrequency" dur="24s" values="0.012;0.016;0.012" repeatCount="indefinite" />
           </feTurbulence>
