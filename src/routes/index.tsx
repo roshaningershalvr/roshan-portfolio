@@ -541,34 +541,33 @@ function Skills() {
   return (
     <section id="skills" aria-labelledby="skills-title" className="hairline-top py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
-        <SectionHeading eyebrow="Skills" title="Tools I work with" />
-
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {SKILL_GROUPS.map((group, i) => (
-            <Reveal key={group.title} delay={i * 90}>
-              <div className="h-full glass glass-edge-glow rounded-2xl p-6 transition-colors duration-300 hover:border-line-strong">
-                <h3 className="font-display text-xl font-medium text-foreground">
-                  {group.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-foreground-faint">
-                  {group.note}
-                </p>
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {group.skills.map((skill, si) => (
-                    <li
-                      key={skill}
-                      style={{ ["--i" as string]: si }}
-                      className="chip rounded-full border border-line-strong px-3 py-1 text-xs font-medium tracking-wide text-foreground-muted transition-colors hover:border-primary hover:text-primary"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          ))}
+        <SectionHeading eyebrow="Capabilities / 01" title="Languages & Technologies" />
+        <div className="mt-10 border-t border-line-strong pt-6">
+          <h3 className="mb-6 flex items-center gap-3 text-sm font-semibold uppercase text-accent"><span className="h-1.5 w-1.5 rounded-full bg-accent" />Current skills</h3>
+          <div className="grid gap-8 md:grid-cols-3">
+            {CURRENT_SKILL_GROUPS.map((group, i) => (
+              <Reveal key={group.title} delay={i * 90}>
+                <div className="border-l border-line-strong pl-5">
+                  <h4 className="text-xs uppercase text-foreground-faint">{group.title}</h4>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {group.skills.map((skill, si) => <li key={skill} style={{ ["--i" as string]: si }} className="chip rounded-md border border-line-strong bg-surface px-3 py-2 text-sm text-foreground transition-colors hover:border-primary">{skill}</li>)}
+                  </ul>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
-      </div>
+        <Reveal>
+          <div className="mt-12 border-t border-line-strong pt-6">
+            <h3 className="text-sm font-semibold uppercase text-primary">Exploring / expanding</h3>
+            <p className="mt-2 text-sm text-foreground-muted">Languages I'm exploring, not a claim of proficiency.</p>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {EXPANDING_LANGUAGES.map((skill, i) => <li key={skill} style={{ ["--i" as string]: i }} className="chip rounded-md border border-line px-3 py-2 text-sm text-foreground-muted">{skill}</li>)}
+            </ul>
+            <div className="mt-7 flex flex-wrap items-center gap-3 text-sm"><span className="text-foreground-faint">Data ecosystem / exploring</span><span className="rounded-md border border-line px-3 py-2 text-foreground-muted">Apache Pig / Pig Latin</span></div>
+          </div>
+        </Reveal>
+        </div>
     </section>
   );
 }
@@ -592,18 +591,27 @@ function Projects() {
                 <h3 className="mt-6 font-display text-2xl leading-tight font-medium tracking-tight text-foreground">
                   {project.title}
                 </h3>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <li key={tag} className="rounded-full border border-line-strong px-2.5 py-0.5 text-xs text-foreground-muted">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
                 <p className="mt-6 italic text-foreground-faint">{project.overview}</p>
               </TiltCard>
             </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function InnovationLab() {
+  return (
+    <section id="lab" aria-labelledby="lab-title" className="hairline-top py-20 sm:py-28">
+      <div className="mx-auto max-w-5xl px-5 sm:px-8">
+        <SectionHeading eyebrow="Concepts / 02" title="Innovation Lab / Ideas" />
+        <p className="mt-5 max-w-2xl text-foreground-muted">Early-stage thinking and proposals, distinct from completed projects.</p>
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          <Reveal><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Concept / workforce intelligence</p><h3 className="mt-5 font-display text-2xl text-foreground">AI Workforce Operating System (WOS)</h3><p className="mt-4 leading-relaxed text-foreground-muted">A concept for mapping skills, identifying skill gaps, learning pathways, workforce demand, and reskilling insights for individuals, enterprises, and public-sector planning.</p></article></Reveal>
+          <Reveal delay={90}><article className="glass h-full rounded-lg p-6 sm:p-8"><p className="eyebrow">Selected idea / early-stage concept</p><h3 className="mt-5 font-display text-2xl text-foreground">MSME-Selected Innovation</h3><p className="mt-4 leading-relaxed text-foreground-muted">An idea selected in an MSME initiative: an early-stage industrial machine monitoring and sensing concept for capturing machine parameters.</p></article></Reveal>
+        </div>
+        <Reveal><article className="mt-5 flex flex-col gap-5 border-t border-line-strong py-7 sm:flex-row sm:items-center sm:justify-between"><div><p className="eyebrow">Hackathon achievement</p><h3 className="mt-2 font-display text-2xl text-foreground">Hackathon Winner</h3></div><p className="text-sm text-foreground-muted">Add event name · Add year · Add award/track</p></article></Reveal>
       </div>
     </section>
   );
@@ -742,6 +750,7 @@ function Index() {
         <About />
         <Skills />
         <Projects />
+        <InnovationLab />
         <Education />
         <Exploring />
         <Contact />
