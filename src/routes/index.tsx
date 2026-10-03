@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type PointerEvent as RPointerEvent } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -275,7 +275,7 @@ function finePointer() {
 
 function Magnetic({ children, className = "", href }: { children: ReactNode; className?: string; href: string }) {
   const ref = useRef<HTMLAnchorElement | null>(null);
-  const onMove = (e: React.PointerEvent) => {
+  const onMove = (e: RPointerEvent) => {
     const el = ref.current;
     if (!el || prefersReduced() || !finePointer()) return;
     const r = el.getBoundingClientRect();
@@ -295,7 +295,7 @@ function Magnetic({ children, className = "", href }: { children: ReactNode; cla
 
 function TiltCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLElement | null>(null);
-  const onMove = (e: React.PointerEvent) => {
+  const onMove = (e: RPointerEvent) => {
     const el = ref.current;
     if (!el || !finePointer()) return;
     const r = el.getBoundingClientRect();
